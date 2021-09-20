@@ -23,7 +23,9 @@ const extractWords = (file) => {
   const lines = file.replace(/\r/g, "").split("\n");
   const firstWordIndex = findFirstWordIndex(lines);
   const words = lines.slice(firstWordIndex).filter(Boolean);
-  return words;
+  return words.map((word) => {
+    return word.replace(/1/g, "ch").replace(/2/g, "ll").replace(/3/g, "rr");
+  });
 };
 
 const downloadFile = (url, outputStream) => {
@@ -46,7 +48,7 @@ const downloadFile = (url, outputStream) => {
   });
 };
 
-const downloadWords = async (url, file) => {
+const downloadWords = async (url) => {
   const tempFilename = "tmp.txt";
   await downloadFile(url, fs.createWriteStream(tempFilename));
   const file = fs.readFileSync(tempFilename, "utf-8");
@@ -98,7 +100,7 @@ async function run() {
 
   for (const file of files) {
     const url = baseUrl + file;
-    const newWords = await downloadWords(url, file);
+    const newWords = await downloadWords(url);
     words = words.concat(newWords);
   }
 
