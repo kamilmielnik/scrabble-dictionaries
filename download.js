@@ -2,6 +2,21 @@ const fs = require("fs");
 const { http, https } = require("follow-redirects");
 const { Writable } = require("stream");
 
+const wait = (time) => new Promise((resolve) => setTimeout(resolve, time));
+
+const retry = async (action, attempts = 3, interval = 1000) => {
+  try {
+    return await action();
+  } catch (error) {
+    if (attempts <= 1) {
+      throw error;
+    }
+
+    await wait(interval);
+    return retry(action, attempts - 1, interval);
+  }
+};
+
 const findFirstWordIndex = (lines) => {
   const firstWordIndex = lines.findIndex((line, index) => {
     const nextLine = line[index + 1] || "";
@@ -57,8 +72,10 @@ const downloadWords = async (url) => {
   return words;
 };
 
-const baseUrl = "https://sites.google.com/site/flexargentina/Home/";
-// const baseUrl = 'http://www.redeletras.com/d/'; // alternative url, although contains some numbers
+const baseUrls = [
+  "https://sites.google.com/site/flexargentina/Home/",
+  "http://www.redeletras.com/d/",
+];
 
 const files = [
   "a1.txt",
@@ -98,10 +115,14 @@ const files = [
 async function run() {
   let words = [];
 
-  for (const file of files) {
-    const url = baseUrl + file;
-    const newWords = await downloadWords(url);
-    words = words.concat(newWords);
+  for (const baseUrl of baseUrls) {
+    for (const file of files) {
+      await retry(async () => {
+        const url = baseUrl + file;
+        const newWords = await downloadWords(url);
+        words = words.concat(newWords);
+      });
+    }
   }
 
   const uniqueWords = Array.from(new Set(words));
