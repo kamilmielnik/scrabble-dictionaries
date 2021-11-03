@@ -104,8 +104,13 @@ async function run() {
     words = words.concat(newWords);
   }
 
-  const sortedWords = words.sort((a, b) => a.localeCompare(b)).filter(Boolean);
-  fs.writeFileSync("fise-2.txt", sortedWords.join("\n"));
+  const uniqueWords = Array.from(new Set(words));
+  const uniqueSortedWords = uniqueWords
+    .sort((a, b) => a.localeCompare(b))
+    .filter(Boolean)
+    .filter((word) => word.match(/\d/) === null);
+
+  fs.writeFileSync("fise-2.txt", uniqueSortedWords.join("\n"));
 }
 
 run();
