@@ -1,6 +1,5 @@
-const fs = require("fs");
-const { http, https } = require("follow-redirects");
-const { Writable } = require("stream");
+const fs = require('fs');
+const { http, https } = require('follow-redirects');
 
 const wait = (time) => new Promise((resolve) => setTimeout(resolve, time));
 
@@ -19,7 +18,7 @@ const retry = async (action, attempts = 3, interval = 1000) => {
 
 const findFirstWordIndex = (lines) => {
   const firstWordIndex = lines.findIndex((line, index) => {
-    const nextLine = line[index + 1] || "";
+    const nextLine = line[index + 1] || '';
     const isNextLineInOrder = line.localeCompare(nextLine) === 1;
     const hasWhitespace = Boolean(line.match(/\s/));
     const isEmpty = line.trim().length === 0;
@@ -27,89 +26,90 @@ const findFirstWordIndex = (lines) => {
     return !isEmpty && !hasWhitespace && isNextLineInOrder;
   });
 
-  if (typeof firstWordIndex === "undefined") {
-    throw new Error("Cannot find index of the first word in the file");
+  if (typeof firstWordIndex === 'undefined') {
+    throw new Error('Cannot find index of the first word in the file');
   }
 
   return firstWordIndex;
 };
 
 const extractWords = (file) => {
-  const lines = file.replace(/\r/g, "").split("\n");
+  const lines = file.replace(/\r/g, '').split('\n');
   const firstWordIndex = findFirstWordIndex(lines);
   const words = lines.slice(firstWordIndex).filter(Boolean);
-  return words.map((word) => {
-    return word.replace(/1/g, "ch").replace(/2/g, "ll").replace(/3/g, "rr");
-  });
+  return words;
 };
 
 const downloadFile = (url, outputStream) => {
   return new Promise((resolve, reject) => {
-    const protocol = url.startsWith("https") ? https : http;
+    const protocol = url.startsWith('https') ? https : http;
     const request = protocol.get(url, (response) => {
-      if (
-        typeof response.statusCode === "undefined" ||
-        response.statusCode >= 400
-      ) {
+      if (typeof response.statusCode === 'undefined' || response.statusCode >= 400) {
         reject();
         return;
       }
 
       response.pipe(outputStream);
-      response.on("error", reject);
-      response.on("end", resolve);
+      response.on('error', reject);
+      response.on('end', resolve);
     });
-    request.on("error", reject);
+    request.on('error', reject);
   });
 };
 
 const downloadWords = async (url) => {
-  const tempFilename = "tmp.txt";
+  const tempFilename = 'tmp.txt';
   await downloadFile(url, fs.createWriteStream(tempFilename));
-  const file = fs.readFileSync(tempFilename, "utf-8");
+  const file = fs.readFileSync(tempFilename, 'utf-8');
   const words = extractWords(file.toString());
   fs.unlinkSync(tempFilename);
   return words;
 };
 
+const prepareWords = (words) => {
+  const uniqueWords = Array.from(new Set(words));
+  const uniqueSortedWords = uniqueWords.sort((a, b) => a.localeCompare(b)).filter(Boolean);
+  return uniqueSortedWords;
+};
+
 const baseUrls = [
-  "https://sites.google.com/site/flexargentina/Home/",
-  "http://www.redeletras.com/d/",
+  'http://www.redeletras.com/d/',
+  // "https://sites.google.com/site/flexargentina/Home/",
 ];
 
 const files = [
-  "a1.txt",
-  "a2.txt",
-  "b.txt",
-  "c1.txt",
-  "c2.txt",
-  "d.txt",
-  "de.txt",
-  "des1.txt",
-  "des2.txt",
-  "e1.txt",
-  "e2.txt",
-  "en.txt",
-  "f.txt",
-  "g.txt",
-  "h.txt",
-  "i.txt",
-  "j.txt",
-  "l.txt",
-  "m.txt",
-  "n.txt",
-  "enie.txt",
-  "o.txt",
-  "p.txt",
-  "q.txt",
-  "r.txt",
-  "s.txt",
-  "t.txt",
-  "u.txt",
-  "v.txt",
-  "x.txt",
-  "y.txt",
-  "z.txt",
+  'a1.txt',
+  'a2.txt',
+  'b.txt',
+  'c1.txt',
+  'c2.txt',
+  'd.txt',
+  'de.txt',
+  'des1.txt',
+  'des2.txt',
+  'e1.txt',
+  'e2.txt',
+  'en.txt',
+  'f.txt',
+  'g.txt',
+  'h.txt',
+  'i.txt',
+  'j.txt',
+  'l.txt',
+  'm.txt',
+  'n.txt',
+  'enie.txt',
+  'o.txt',
+  'p.txt',
+  'q.txt',
+  'r.txt',
+  's.txt',
+  't.txt',
+  'u.txt',
+  'v.txt',
+  'x.txt',
+  'y.txt',
+  'z.txt',
 ];
 
 async function run() {
@@ -119,19 +119,18 @@ async function run() {
     for (const file of files) {
       await retry(async () => {
         const url = baseUrl + file;
+        console.log(`Downloading ${url}`);
         const newWords = await downloadWords(url);
         words = words.concat(newWords);
       });
     }
   }
 
-  const uniqueWords = Array.from(new Set(words));
-  const uniqueSortedWords = uniqueWords
-    .sort((a, b) => a.localeCompare(b))
-    .filter(Boolean)
-    .filter((word) => word.match(/\d/) === null);
+  const processedWords = words
+    .map((word) => word.replaceAll('1', 'ñ'))
+    .filter((word) => !word.match(/\d/));
 
-  fs.writeFileSync("fise-2.txt", uniqueSortedWords.join("\n"));
+  fs.writeFileSync('fise-2.txt', prepareWords(processedWords).join('\n'));
 }
 
 run();
