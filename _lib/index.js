@@ -1,5 +1,6 @@
 const { http, https } = require('follow-redirects');
 const fs = require('fs');
+const unzipper = require('unzipper');
 
 const downloadFile = (url, filename) => {
   return new Promise((resolve, reject) => {
@@ -33,6 +34,18 @@ const downloadFile = (url, filename) => {
   });
 };
 
+const extractWords = (file) => {
+  const lines = file.toLocaleLowerCase().split(/\r?\n/g);
+  const words = lines
+    .map((word) => word.trim())
+    .filter(Boolean)
+    .sort((a, b) => a.localeCompare(b));
+  const uniqueWords = Array.from(new Set(words));
+  const output = uniqueWords.join('\n');
+
+  return output;
+};
+
 const getNextTmpFilename = (() => {
   let tmpFilenameIndex = 0;
 
@@ -41,7 +54,13 @@ const getNextTmpFilename = (() => {
   };
 })();
 
+const unzipFiles = (filename, onEntry) => {
+  return fs.createReadStream(filename).pipe(unzipper.Parse()).on('entry', onEntry).promise();
+};
+
 module.exports = {
   downloadFile,
+  extractWords,
   getNextTmpFilename,
+  unzipFiles,
 };
