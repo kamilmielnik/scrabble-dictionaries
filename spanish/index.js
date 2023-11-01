@@ -1,12 +1,12 @@
 const fs = require('fs');
 const unzipper = require('unzipper');
 
-const { downloadFile, getNextTmpFilename } = require('./lib');
+const { downloadFile, getNextTmpFilename } = require('../_lib');
 
 const JAR_URL = 'http://www.redeletras.com/diccionario/';
-const OUTPUT_FILENAME = 'fise-2.txt';
+const OUTPUT_FILENAME = 'spanish/fise-2.txt';
 
-async function run() {
+module.exports = async () => {
   const zipFilename = await downloadFile(JAR_URL, getNextTmpFilename());
   const tmpFilenames = [];
   const files = [];
@@ -41,6 +41,4 @@ async function run() {
   const uniqueWords = Array.from(new Set(words));
 
   fs.writeFileSync(OUTPUT_FILENAME, uniqueWords.join('\n'));
-}
-
-run();
+};

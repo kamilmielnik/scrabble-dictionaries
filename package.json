@@ -1,5 +1,5 @@
 {
-  "name": "spanish",
+  "name": "scrabble-dictionaries",
   "scripts": {
     "start": "node index.js"
   },
