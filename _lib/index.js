@@ -2,7 +2,9 @@ const { http, https } = require('follow-redirects');
 const fs = require('fs');
 const unzipper = require('unzipper');
 
-const downloadFile = (url, filename) => {
+const downloadFile = (url) => {
+  const filename = getNextTmpFilename();
+
   return new Promise((resolve, reject) => {
     const protocol = url.startsWith('https') ? https : http;
     const writeStream = fs.createWriteStream(filename);
@@ -58,9 +60,28 @@ const unzipFiles = (filename, onEntry) => {
   return fs.createReadStream(filename).pipe(unzipper.Parse()).on('entry', onEntry).promise();
 };
 
+const unzipFile = async (filename, zippedFilename) => {
+  const tmpFilename = getNextTmpFilename();
+
+  await unzipFiles(filename, (entry) => {
+    if (entry.path === zippedFilename) {
+      entry.pipe(fs.createWriteStream(tmpFilename));
+    } else {
+      entry.autodrain();
+    }
+  });
+
+  const file = fs.readFileSync(tmpFilename, 'utf-8');
+
+  fs.unlinkSync(tmpFilename);
+
+  return file;
+};
+
 module.exports = {
   downloadFile,
   extractWords,
   getNextTmpFilename,
+  unzipFile,
   unzipFiles,
 };

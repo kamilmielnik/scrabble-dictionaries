@@ -6,7 +6,7 @@ const JAR_URL = 'http://www.redeletras.com/diccionario/';
 const OUTPUT_FILENAME = 'spanish/fise-2.txt';
 
 module.exports = async () => {
-  const zipFilename = await downloadFile(JAR_URL, getNextTmpFilename());
+  const zipFilename = await downloadFile(JAR_URL);
   const tmpFilenames = [];
   const files = [];
 
@@ -20,8 +20,6 @@ module.exports = async () => {
     }
   });
 
-  fs.unlinkSync(zipFilename);
-
   for (const filename of tmpFilenames) {
     const file = fs.readFileSync(filename, 'utf-8');
     files.push(file);
@@ -31,5 +29,6 @@ module.exports = async () => {
   const file = files.join('\n').replaceAll('�', 'ñ');
   const words = extractWords(file);
 
+  fs.unlinkSync(zipFilename);
   fs.writeFileSync(OUTPUT_FILENAME, words);
 };
