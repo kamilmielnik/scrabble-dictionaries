@@ -1,7 +1,7 @@
 {
   "name": "scrabble-dictionaries",
   "scripts": {
-    "start": "node index.js"
+    "start": "node ./_src/index.js"
   },
   "dependencies": {
     "follow-redirects": "^1.15.9",
