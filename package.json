@@ -4,8 +4,8 @@
     "start": "node index.js"
   },
   "dependencies": {
-    "follow-redirects": "^1.15.3",
-    "memfs": "^4.6.0",
-    "unzipper": "^0.10.14"
+    "follow-redirects": "^1.15.9",
+    "memfs": "^4.17.0",
+    "unzipper": "^0.12.3"
   }
 }
