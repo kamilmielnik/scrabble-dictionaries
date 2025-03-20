@@ -5,6 +5,7 @@
 Federación Internacional de Léxico en Español
 
 - Download: [`file-2017.txt`](file-2017.txt)
+- Source: email from a Costa Rican Scrabble player
 
 ## Lexicón FISE-2 2009
 
