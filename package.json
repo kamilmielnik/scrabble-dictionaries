@@ -1,5 +1,8 @@
 {
   "name": "scrabble-dictionaries",
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "start": "node ./_src/index.js"
   },
