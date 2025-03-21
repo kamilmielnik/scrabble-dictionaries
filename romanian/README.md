@@ -2,7 +2,7 @@
 
 ## Lista Oficială de Cuvinte admise la Scrabble
 
-Ultima versiune oficială a LOC este 5.0. Versiunea 6.0 conține modificări aduse LOC în dexonline, dar neîncorporate în versiunea oficială.
+> Ultima versiune oficială a LOC este 5.0. Versiunea 6.0 conține modificări aduse LOC în dexonline, dar neîncorporate în versiunea oficială.
 
 Source: https://dexonline.ro/scrabble
 
