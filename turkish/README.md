@@ -2,10 +2,10 @@
 
 ## Kelimelik
 
-I got this file via email from a Turkish Kelimelik player who created it himself. This dictionary is meant to be as close to Kelimelik database as possible.
+This dictionary is meant to be as close to Kelimelik database as possible.
 
 - Download: [`kelimelik.txt`](kelimelik.txt)
-- Source: email from a Turkish Kelimelik player
+- Source: email from creator of https://klmbul.com/
 
 ## Türk Dil Kurumu
 
