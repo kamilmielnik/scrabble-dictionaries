@@ -2,10 +2,10 @@
 
 ## Kelimelik
 
-This dictionary is meant to be as close to Kelimelik database as possible.
+I got this file via email from creator of https://scrabblecozucu.com/. This dictionary is meant to be as close to Kelimelik database as possible.
 
 - Download: [`kelimelik.txt`](kelimelik.txt)
-- Source: email from creator of https://klmbul.com/
+- Source: email from creator of https://scrabblecozucu.com/
 
 ## Türk Dil Kurumu
 
