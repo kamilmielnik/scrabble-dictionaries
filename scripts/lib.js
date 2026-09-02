@@ -4,15 +4,22 @@ const os = require('os');
 const path = require('path');
 const { pipeline } = require('stream/promises');
 const unzipper = require('unzipper');
+const locales = require('./locales');
 
 module.exports = {
-  dictionaryPath,
-  downloadZipEntries,
-  extractWords,
+  updateDictionary,
 };
 
-function dictionaryPath(language, filename) {
-  return path.join(__dirname, '..', language, filename);
+async function updateDictionary({ language, filename, url, encoding, isWantedEntry }) {
+  console.log(`Downloading ${url}`);
+  const files = await downloadZipEntries(url, isWantedEntry, encoding);
+  const words = extractWords(files.join('\n'), locales[language]);
+  saveDictionary(language, filename, words);
+  console.log(`Saved ${words.length} words to ${language}/${filename}`);
+}
+
+function saveDictionary(language, filename, words) {
+  fs.writeFileSync(path.join(__dirname, '..', language, filename), words.join('\n'));
 }
 
 async function downloadZipEntries(url, isWantedEntry, encoding = 'utf8') {
@@ -70,7 +77,7 @@ function extractWords(file, locale) {
   const lines = file.split(/\r?\n/g);
   const words = new Set(lines.map((line) => line.trim().toLocaleLowerCase(locale).normalize('NFC')).filter(isWord));
 
-  return Array.from(words).sort(compareCodePoints).join('\n');
+  return Array.from(words).sort(compareCodePoints);
 }
 
 function isWord(line) {
