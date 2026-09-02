@@ -4,7 +4,7 @@
     "node": ">=22"
   },
   "scripts": {
-    "start": "node ./_src/index.js"
+    "start": "node ./scripts/index.js"
   },
   "dependencies": {
     "follow-redirects": "^1.16.0",
