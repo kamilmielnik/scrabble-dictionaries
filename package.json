@@ -4,10 +4,15 @@
     "node": ">=22"
   },
   "scripts": {
-    "start": "node ./scripts/index.js"
+    "start": "node ./scripts/index.js",
+    "format": "oxfmt --check './scripts/**/*.js'",
+    "format:fix": "oxfmt --write './scripts/**/*.js'"
   },
   "dependencies": {
     "follow-redirects": "^1.16.0",
     "unzipper": "^0.12.5"
+  },
+  "devDependencies": {
+    "oxfmt": "^0.66.0"
   }
 }
