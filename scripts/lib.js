@@ -66,14 +66,33 @@ async function readZipEntries(zipFilename, isWantedEntry, encoding) {
   return files;
 }
 
-function extractWords(file) {
-  const lines = file.toLocaleLowerCase().split(/\r?\n/g);
+function extractWords(file, locale) {
+  const lines = file.split(/\r?\n/g);
   const words = lines
-    .map((word) => word.trim())
+    .map((line) => line.trim().toLocaleLowerCase(locale).normalize('NFC'))
     .filter(Boolean)
-    .sort((a, b) => a.localeCompare(b));
+    .sort(compareCodePoints);
   const uniqueWords = Array.from(new Set(words));
   const output = uniqueWords.join('\n');
 
   return output;
+}
+
+function compareCodePoints(a, b) {
+  const length = Math.min(a.length, b.length);
+
+  for (let index = 0; index < length; index++) {
+    const codePoint = a.codePointAt(index);
+    const difference = codePoint - b.codePointAt(index);
+
+    if (difference !== 0) {
+      return difference;
+    }
+
+    if (codePoint > 0xffff) {
+      index++;
+    }
+  }
+
+  return a.length - b.length;
 }
