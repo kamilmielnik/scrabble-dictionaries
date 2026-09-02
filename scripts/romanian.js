@@ -28,8 +28,10 @@ async function updateRomanian() {
 }
 
 async function download({ zipUrl, zippedFilename, outputFilename }) {
+  console.log(`Downloading ${zipUrl}`);
   const [file] = await downloadZipEntries(zipUrl, (entry) => entry.path === zippedFilename);
   const words = extractWords(file, 'ro');
 
   fs.writeFileSync(outputFilename, words);
+  console.log(`Saved ${outputFilename}`);
 }
