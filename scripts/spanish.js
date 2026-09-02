@@ -12,8 +12,8 @@ async function updateSpanish() {
 }
 
 async function download({ jarUrl, outputFilename }) {
-  const files = await downloadZipEntries(jarUrl, (entry) => entry.path.endsWith('.txt'));
-  const file = files.join('\n').replaceAll('�', 'ñ');
+  const files = await downloadZipEntries(jarUrl, (entry) => entry.path.endsWith('.txt'), 'latin1');
+  const file = files.join('\n');
   const words = extractWords(file);
 
   fs.writeFileSync(outputFilename, words);

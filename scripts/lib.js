@@ -15,13 +15,13 @@ function dictionaryPath(language, filename) {
   return path.join(__dirname, '..', language, filename);
 }
 
-async function downloadZipEntries(url, isWantedEntry) {
+async function downloadZipEntries(url, isWantedEntry, encoding = 'utf8') {
   const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'scrabble-dictionaries-'));
 
   try {
     const zipFilename = path.join(tmpDir, 'archive.zip');
     await downloadFile(url, zipFilename);
-    return await readZipEntries(zipFilename, isWantedEntry);
+    return await readZipEntries(zipFilename, isWantedEntry, encoding);
   } finally {
     fs.rmSync(tmpDir, { recursive: true, force: true });
   }
@@ -54,13 +54,13 @@ function get(url) {
   });
 }
 
-async function readZipEntries(zipFilename, isWantedEntry) {
+async function readZipEntries(zipFilename, isWantedEntry, encoding) {
   const directory = await unzipper.Open.file(zipFilename);
   const files = [];
 
   for (const entry of directory.files.filter(isWantedEntry)) {
     const buffer = await entry.buffer();
-    files.push(buffer.toString('utf-8'));
+    files.push(buffer.toString(encoding));
   }
 
   return files;
