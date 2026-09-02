@@ -2,7 +2,16 @@ const fs = require('fs');
 
 const { downloadFile, extractWords, getNextTmpFilename, unzipFiles } = require('./lib');
 
-const download = async ({ jarUrl, outputFilename }) => {
+module.exports = updateSpanish;
+
+async function updateSpanish() {
+  await download({
+    jarUrl: 'http://www.redeletras.com/diccionario/',
+    outputFilename: './spanish/fise-2.txt',
+  });
+}
+
+async function download({ jarUrl, outputFilename }) {
   const zipFilename = await downloadFile(jarUrl);
   const tmpFilenames = [];
   const files = [];
@@ -28,11 +37,4 @@ const download = async ({ jarUrl, outputFilename }) => {
 
   fs.unlinkSync(zipFilename);
   fs.writeFileSync(outputFilename, words);
-};
-
-module.exports = async () => {
-  await download({
-    jarUrl: 'http://www.redeletras.com/diccionario/',
-    outputFilename: './spanish/fise-2.txt',
-  });
-};
+}

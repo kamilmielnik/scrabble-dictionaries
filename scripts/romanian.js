@@ -2,16 +2,9 @@ const fs = require('fs');
 
 const { downloadFile, extractWords, unzipFile } = require('./lib');
 
-const download = async ({ zipUrl, zippedFilename, outputFilename }) => {
-  const zipFilename = await downloadFile(zipUrl);
-  const file = await unzipFile(zipFilename, zippedFilename);
-  const words = extractWords(file);
+module.exports = updateRomanian;
 
-  fs.unlinkSync(zipFilename);
-  fs.writeFileSync(outputFilename, words);
-};
-
-module.exports = async () => {
+async function updateRomanian() {
   await download({
     zipUrl: 'https://dexonline.ro/static/download/scrabble/loc-flexiuni-4.0.zip',
     zippedFilename: 'loc-flexiuni-4.0.txt',
@@ -32,4 +25,13 @@ module.exports = async () => {
     zippedFilename: 'loc-flexiuni-6.0.txt',
     outputFilename: './romanian/loc-6.0.txt',
   });
-};
+}
+
+async function download({ zipUrl, zippedFilename, outputFilename }) {
+  const zipFilename = await downloadFile(zipUrl);
+  const file = await unzipFile(zipFilename, zippedFilename);
+  const words = extractWords(file);
+
+  fs.unlinkSync(zipFilename);
+  fs.writeFileSync(outputFilename, words);
+}

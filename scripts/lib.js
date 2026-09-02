@@ -2,7 +2,15 @@ const { http, https } = require('follow-redirects');
 const fs = require('fs');
 const unzipper = require('unzipper');
 
-const downloadFile = (url) => {
+module.exports = {
+  downloadFile,
+  extractWords,
+  getNextTmpFilename,
+  unzipFile,
+  unzipFiles,
+};
+
+function downloadFile(url) {
   const filename = getNextTmpFilename();
 
   return new Promise((resolve, reject) => {
@@ -34,33 +42,9 @@ const downloadFile = (url) => {
       reject(error);
     });
   });
-};
+}
 
-const extractWords = (file) => {
-  const lines = file.toLocaleLowerCase().split(/\r?\n/g);
-  const words = lines
-    .map((word) => word.trim())
-    .filter(Boolean)
-    .sort((a, b) => a.localeCompare(b));
-  const uniqueWords = Array.from(new Set(words));
-  const output = uniqueWords.join('\n');
-
-  return output;
-};
-
-const getNextTmpFilename = (() => {
-  let tmpFilenameIndex = 0;
-
-  return () => {
-    return `tmp-${++tmpFilenameIndex}`;
-  };
-})();
-
-const unzipFiles = (filename, onEntry) => {
-  return fs.createReadStream(filename).pipe(unzipper.Parse()).on('entry', onEntry).promise();
-};
-
-const unzipFile = async (filename, zippedFilename) => {
+async function unzipFile(filename, zippedFilename) {
   const tmpFilename = getNextTmpFilename();
 
   await unzipFiles(filename, (entry) => {
@@ -76,12 +60,26 @@ const unzipFile = async (filename, zippedFilename) => {
   fs.unlinkSync(tmpFilename);
 
   return file;
-};
+}
 
-module.exports = {
-  downloadFile,
-  extractWords,
-  getNextTmpFilename,
-  unzipFile,
-  unzipFiles,
-};
+function unzipFiles(filename, onEntry) {
+  return fs.createReadStream(filename).pipe(unzipper.Parse()).on('entry', onEntry).promise();
+}
+
+function extractWords(file) {
+  const lines = file.toLocaleLowerCase().split(/\r?\n/g);
+  const words = lines
+    .map((word) => word.trim())
+    .filter(Boolean)
+    .sort((a, b) => a.localeCompare(b));
+  const uniqueWords = Array.from(new Set(words));
+  const output = uniqueWords.join('\n');
+
+  return output;
+}
+
+let tmpFilenameIndex = 0;
+
+function getNextTmpFilename() {
+  return `tmp-${++tmpFilenameIndex}`;
+}
