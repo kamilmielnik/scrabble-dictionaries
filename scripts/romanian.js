@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-const { downloadFile, extractWords, unzipFile } = require('./lib');
+const { downloadFile, extractWords, readZipEntries } = require('./lib');
 
 module.exports = updateRomanian;
 
@@ -29,7 +29,7 @@ async function updateRomanian() {
 
 async function download({ zipUrl, zippedFilename, outputFilename }) {
   const zipFilename = await downloadFile(zipUrl);
-  const file = await unzipFile(zipFilename, zippedFilename);
+  const [file] = await readZipEntries(zipFilename, (entry) => entry.path === zippedFilename);
   const words = extractWords(file);
 
   fs.unlinkSync(zipFilename);

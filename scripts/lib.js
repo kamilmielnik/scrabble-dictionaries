@@ -6,8 +6,7 @@ module.exports = {
   downloadFile,
   extractWords,
   getNextTmpFilename,
-  unzipFile,
-  unzipFiles,
+  readZipEntries,
 };
 
 function downloadFile(url) {
@@ -44,26 +43,16 @@ function downloadFile(url) {
   });
 }
 
-async function unzipFile(filename, zippedFilename) {
-  const tmpFilename = getNextTmpFilename();
+async function readZipEntries(zipFilename, isWantedEntry) {
+  const directory = await unzipper.Open.file(zipFilename);
+  const files = [];
 
-  await unzipFiles(filename, (entry) => {
-    if (entry.path === zippedFilename) {
-      entry.pipe(fs.createWriteStream(tmpFilename));
-    } else {
-      entry.autodrain();
-    }
-  });
+  for (const entry of directory.files.filter(isWantedEntry)) {
+    const buffer = await entry.buffer();
+    files.push(buffer.toString('utf-8'));
+  }
 
-  const file = fs.readFileSync(tmpFilename, 'utf-8');
-
-  fs.unlinkSync(tmpFilename);
-
-  return file;
-}
-
-function unzipFiles(filename, onEntry) {
-  return fs.createReadStream(filename).pipe(unzipper.Parse()).on('entry', onEntry).promise();
+  return files;
 }
 
 function extractWords(file) {
