@@ -1,8 +1,20 @@
-# scrabble-dictionaries
+<div align="center">
+  <h1>scrabble-dictionaries</h1>
 
-Archive of [Scrabble](https://en.wikipedia.org/wiki/Scrabble) dictionaries in various languages.
+  <p>
+    <img src="https://github.com/kamilmielnik/scrabble-dictionaries/actions/workflows/check.yml/badge.svg" alt="Check" />
+  </p>
 
-Used by [Scrabble Solver](https://scrabble-solver.org) ([kamilmielnik/scrabble-solver](https://github.com/kamilmielnik/scrabble-solver)).
+  <p>
+    Archive of <a href="https://en.wikipedia.org/wiki/Scrabble">Scrabble</a> dictionaries in various languages.
+  </p>
+
+  <p>
+    Used by <a href="https://scrabble-solver.org">Scrabble Solver</a> (<a href="https://github.com/kamilmielnik/scrabble-solver">kamilmielnik/scrabble-solver</a>).
+  </p>
+
+  <hr />
+</div>
 
 ## Dictionaries
 
