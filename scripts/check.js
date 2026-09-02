@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const locales = require('./locales');
-const { compareCodePoints } = require('./words');
+const { compareWords } = require('./words');
 
 const ROOT = path.join(__dirname, '..');
 const MAX_REPORTED_PROBLEMS = 10;
@@ -31,6 +31,7 @@ function listDictionaries(language) {
 
 function checkDictionary(filePath, locale) {
   const content = fs.readFileSync(filePath, 'utf8');
+  const compare = compareWords(locale);
   const problems = [];
 
   if (content.startsWith('﻿')) {
@@ -69,7 +70,7 @@ function checkDictionary(filePath, locale) {
     }
 
     if (index > 0) {
-      const order = compareCodePoints(words[index - 1], word);
+      const order = compare(words[index - 1], word);
 
       if (order === 0) {
         problems.push(`line ${line}: duplicate: ${word}`);

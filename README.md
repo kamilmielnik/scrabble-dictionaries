@@ -41,7 +41,7 @@ Every dictionary is a plain [UTF-8](https://en.wikipedia.org/wiki/UTF-8) text fi
 
 - one word per line, separated by [LF](https://en.wikipedia.org/wiki/Newline), with no trailing LF after the last word
 - words are lowercase and [NFC](https://unicode.org/reports/tr15/)-normalized
-- words are sorted by Unicode code point, the order produced by `LC_ALL=C sort`
+- words are sorted alphabetically according to the collation rules of their language ([`Intl.Collator`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Collator))
 - no duplicates, no empty lines, no surrounding whitespace, no byte order mark
 
 `npm run check` validates every dictionary against these rules.
