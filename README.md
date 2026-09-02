@@ -2,7 +2,9 @@
   <h1>scrabble-dictionaries</h1>
 
   <p>
+    <img src="https://img.shields.io/badge/bun-%3E=1.4-brightgreen.svg" alt="Bun" />
     <img src="https://github.com/kamilmielnik/scrabble-dictionaries/actions/workflows/check.yml/badge.svg" alt="Check" />
+    <img src="https://github.com/kamilmielnik/scrabble-dictionaries/actions/workflows/format.yml/badge.svg" alt="Format" />
   </p>
 
   <p>
@@ -44,16 +46,16 @@ Every dictionary is a plain [UTF-8](https://en.wikipedia.org/wiki/UTF-8) text fi
 - words are sorted alphabetically according to the collation rules of their language ([`Intl.Collator`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Collator))
 - no duplicates, no empty lines, no surrounding whitespace, no byte order mark
 
-`npm run check` validates every dictionary against these rules.
+`bun run check` validates every dictionary against these rules.
 
 ## Updating
 
-`npm run update` downloads the Romanian and Spanish FISE dictionaries from their sources and normalizes them. The remaining dictionaries were obtained manually; their sources are listed in the language READMEs.
+`bun run update` downloads the Romanian and Spanish FISE dictionaries from their sources and normalizes them. The remaining dictionaries were obtained manually; their sources are listed in the language READMEs.
 
 ## Adding a dictionary
 
 1. Save the file as `<language>/<name>.txt`. For a new language, create the directory and add its locale to `scripts/locales.js`.
 2. Normalize the file to the format above: lowercase, deduplicate and sort it the way `scripts/words.js` does.
-3. Run `npm run check`.
+3. Run `bun run check`.
 4. Describe the dictionary in `<language>/README.md`: what it is, where it came from and which edition or date it corresponds to.
 5. Add it to the table above.

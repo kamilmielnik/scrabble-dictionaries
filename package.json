@@ -4,13 +4,13 @@
   "private": true,
   "repository": "github:kamilmielnik/scrabble-dictionaries",
   "engines": {
-    "node": ">=22"
+    "bun": ">=1.4"
   },
   "scripts": {
-    "check": "node ./scripts/check.js",
+    "check": "bun ./scripts/check.js",
     "format": "oxfmt --check './scripts/**/*.js'",
     "format:fix": "oxfmt --write './scripts/**/*.js'",
-    "update": "node ./scripts/update.js"
+    "update": "bun ./scripts/update.js"
   },
   "dependencies": {
     "follow-redirects": "^1.16.0",
