@@ -2,14 +2,19 @@
 
 ## Kelimelik
 
-I got this file via email from creator of https://scrabblecozucu.com/. This dictionary is meant to be as close to Kelimelik database as possible.
+Word list meant to be as close as possible to the dictionary used by the Kelimelik game. It was received by email from the creator of https://scrabblecozucu.com/.
 
 - Download: [`kelimelik.txt`](kelimelik.txt)
-- Source: email from creator of https://scrabblecozucu.com/
+- Source: email from the creator of https://scrabblecozucu.com/
 
 ## Türk Dil Kurumu
 
-Dictionary from [Turkish Language Association](https://en.wikipedia.org/wiki/Turkish_Language_Association). It contains all the Turkish words, including abbreviations, chemical symbols, etc. which usually are not allowed in word games.
+Word list based on the dictionary of the [Turkish Language Association](https://en.wikipedia.org/wiki/Turkish_Language_Association) (Türk Dil Kurumu, TDK). It was not obtained from TDK directly, but from the [kkrypt0nn/wordlists](https://github.com/kkrypt0nn/wordlists) repository.
+
+It contains all Turkish words, including entries that usually are not allowed in word games:
+
+- abbreviations and chemical symbols
+- proper nouns and their inflected forms with an apostrophe before the suffix, such as `adana'lı` or `abdullah'la`
 
 - Download: [`tla.txt`](tla.txt)
 - Source: https://github.com/kkrypt0nn/wordlists/blob/main/wordlists/languages/turkish.txt
