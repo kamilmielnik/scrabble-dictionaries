@@ -1,26 +1,30 @@
 const { http, https } = require('follow-redirects');
 const fs = require('fs');
+const os = require('os');
+const path = require('path');
 const { pipeline } = require('stream/promises');
 const unzipper = require('unzipper');
 
 module.exports = {
-  downloadFile,
+  downloadZipEntries,
   extractWords,
-  readZipEntries,
 };
 
-async function downloadFile(url) {
-  const filename = getNextTmpFilename();
-  const response = await get(url);
+async function downloadZipEntries(url, isWantedEntry) {
+  const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'scrabble-dictionaries-'));
 
   try {
-    await pipeline(response, fs.createWriteStream(filename));
-  } catch (error) {
-    fs.rmSync(filename, { force: true });
-    throw error;
+    const zipFilename = path.join(tmpDir, 'archive.zip');
+    await downloadFile(url, zipFilename);
+    return await readZipEntries(zipFilename, isWantedEntry);
+  } finally {
+    fs.rmSync(tmpDir, { recursive: true, force: true });
   }
+}
 
-  return filename;
+async function downloadFile(url, filename) {
+  const response = await get(url);
+  await pipeline(response, fs.createWriteStream(filename));
 }
 
 function get(url) {
@@ -63,10 +67,4 @@ function extractWords(file) {
   const output = uniqueWords.join('\n');
 
   return output;
-}
-
-let tmpFilenameIndex = 0;
-
-function getNextTmpFilename() {
-  return `tmp-${++tmpFilenameIndex}`;
 }

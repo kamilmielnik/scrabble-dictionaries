@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-const { downloadFile, extractWords, readZipEntries } = require('./lib');
+const { downloadZipEntries, extractWords } = require('./lib');
 
 module.exports = updateSpanish;
 
@@ -12,11 +12,9 @@ async function updateSpanish() {
 }
 
 async function download({ jarUrl, outputFilename }) {
-  const zipFilename = await downloadFile(jarUrl);
-  const files = await readZipEntries(zipFilename, (entry) => entry.path.endsWith('.txt'));
+  const files = await downloadZipEntries(jarUrl, (entry) => entry.path.endsWith('.txt'));
   const file = files.join('\n').replaceAll('�', 'ñ');
   const words = extractWords(file);
 
-  fs.unlinkSync(zipFilename);
   fs.writeFileSync(outputFilename, words);
 }
