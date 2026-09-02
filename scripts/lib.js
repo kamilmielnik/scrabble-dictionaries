@@ -1,4 +1,4 @@
-const { http, https } = require('follow-redirects');
+const { https } = require('follow-redirects');
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
@@ -33,14 +33,18 @@ async function downloadFile(url, filename) {
 }
 
 function get(url) {
-  const protocol = url.startsWith('https') ? https : http;
-
   return new Promise((resolve, reject) => {
-    protocol
+    https
       .get(url, (response) => {
         if (typeof response.statusCode === 'undefined' || response.statusCode >= 400) {
           response.resume();
           reject(new Error(`Cannot download ${url}: HTTP ${response.statusCode}`));
+          return;
+        }
+
+        if (new URL(response.responseUrl).protocol !== 'https:') {
+          response.resume();
+          reject(new Error(`Refusing insecure redirect from ${url} to ${response.responseUrl}`));
           return;
         }
 

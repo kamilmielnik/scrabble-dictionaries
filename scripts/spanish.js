@@ -6,7 +6,7 @@ module.exports = updateSpanish;
 
 async function updateSpanish() {
   await download({
-    jarUrl: 'http://www.redeletras.com/diccionario/',
+    jarUrl: 'https://www.redeletras.com/diccionario/',
     outputFilename: dictionaryPath('spanish', 'fise-2.txt'),
   });
 }
