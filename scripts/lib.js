@@ -5,7 +5,6 @@ const unzipper = require('unzipper');
 module.exports = {
   downloadFile,
   extractWords,
-  getNextTmpFilename,
   readZipEntries,
 };
 
