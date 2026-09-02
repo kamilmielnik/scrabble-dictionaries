@@ -14,16 +14,21 @@ function downloadFile(url) {
   return new Promise((resolve, reject) => {
     const protocol = url.startsWith('https') ? https : http;
     const writeStream = fs.createWriteStream(filename);
+
+    function fail(error) {
+      writeStream.destroy();
+      fs.rmSync(filename, { force: true });
+      reject(error);
+    }
+
     const request = protocol.get(url, (response) => {
       if (typeof response.statusCode === 'undefined' || response.statusCode >= 400) {
-        reject(new Error(`Cannot download file: ${url}`));
+        response.resume();
+        fail(new Error(`Cannot download ${url}: HTTP ${response.statusCode}`));
         return;
       }
 
-      response.on('error', (error) => {
-        writeStream.close();
-        reject(error);
-      });
+      response.on('error', fail);
 
       response.on('end', () => {
         writeStream.on('finish', () => {
@@ -35,10 +40,7 @@ function downloadFile(url) {
       response.pipe(writeStream);
     });
 
-    request.on('error', (error) => {
-      writeStream.close();
-      reject(error);
-    });
+    request.on('error', fail);
   });
 }
 
