@@ -1,5 +1,8 @@
 {
   "name": "scrabble-dictionaries",
+  "description": "Archive of Scrabble dictionaries in various languages",
+  "private": true,
+  "repository": "github:kamilmielnik/scrabble-dictionaries",
   "engines": {
     "node": ">=22"
   },
