@@ -7,9 +7,10 @@
     "node": ">=22"
   },
   "scripts": {
-    "start": "node ./scripts/index.js",
+    "check": "node ./scripts/check.js",
     "format": "oxfmt --check './scripts/**/*.js'",
-    "format:fix": "oxfmt --write './scripts/**/*.js'"
+    "format:fix": "oxfmt --write './scripts/**/*.js'",
+    "update": "node ./scripts/update.js"
   },
   "dependencies": {
     "follow-redirects": "^1.16.0",
