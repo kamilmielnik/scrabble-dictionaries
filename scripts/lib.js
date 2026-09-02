@@ -1,5 +1,6 @@
 const { http, https } = require('follow-redirects');
 const fs = require('fs');
+const { pipeline } = require('stream/promises');
 const unzipper = require('unzipper');
 
 module.exports = {
@@ -8,39 +9,35 @@ module.exports = {
   readZipEntries,
 };
 
-function downloadFile(url) {
+async function downloadFile(url) {
   const filename = getNextTmpFilename();
+  const response = await get(url);
+
+  try {
+    await pipeline(response, fs.createWriteStream(filename));
+  } catch (error) {
+    fs.rmSync(filename, { force: true });
+    throw error;
+  }
+
+  return filename;
+}
+
+function get(url) {
+  const protocol = url.startsWith('https') ? https : http;
 
   return new Promise((resolve, reject) => {
-    const protocol = url.startsWith('https') ? https : http;
-    const writeStream = fs.createWriteStream(filename);
+    protocol
+      .get(url, (response) => {
+        if (typeof response.statusCode === 'undefined' || response.statusCode >= 400) {
+          response.resume();
+          reject(new Error(`Cannot download ${url}: HTTP ${response.statusCode}`));
+          return;
+        }
 
-    function fail(error) {
-      writeStream.destroy();
-      fs.rmSync(filename, { force: true });
-      reject(error);
-    }
-
-    const request = protocol.get(url, (response) => {
-      if (typeof response.statusCode === 'undefined' || response.statusCode >= 400) {
-        response.resume();
-        fail(new Error(`Cannot download ${url}: HTTP ${response.statusCode}`));
-        return;
-      }
-
-      response.on('error', fail);
-
-      response.on('end', () => {
-        writeStream.on('finish', () => {
-          writeStream.close();
-          resolve(filename);
-        });
-      });
-
-      response.pipe(writeStream);
-    });
-
-    request.on('error', fail);
+        resolve(response);
+      })
+      .on('error', reject);
   });
 }
 
