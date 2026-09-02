@@ -68,14 +68,9 @@ async function readZipEntries(zipFilename, isWantedEntry, encoding) {
 
 function extractWords(file, locale) {
   const lines = file.split(/\r?\n/g);
-  const words = lines
-    .map((line) => line.trim().toLocaleLowerCase(locale).normalize('NFC'))
-    .filter(Boolean)
-    .sort(compareCodePoints);
-  const uniqueWords = Array.from(new Set(words));
-  const output = uniqueWords.join('\n');
+  const words = new Set(lines.map((line) => line.trim().toLocaleLowerCase(locale).normalize('NFC')).filter(Boolean));
 
-  return output;
+  return Array.from(words).sort(compareCodePoints).join('\n');
 }
 
 function compareCodePoints(a, b) {
