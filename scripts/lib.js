@@ -6,9 +6,14 @@ const { pipeline } = require('stream/promises');
 const unzipper = require('unzipper');
 
 module.exports = {
+  dictionaryPath,
   downloadZipEntries,
   extractWords,
 };
+
+function dictionaryPath(language, filename) {
+  return path.join(__dirname, '..', language, filename);
+}
 
 async function downloadZipEntries(url, isWantedEntry) {
   const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'scrabble-dictionaries-'));

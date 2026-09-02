@@ -1,13 +1,13 @@
 const fs = require('fs');
 
-const { downloadZipEntries, extractWords } = require('./lib');
+const { dictionaryPath, downloadZipEntries, extractWords } = require('./lib');
 
 module.exports = updateSpanish;
 
 async function updateSpanish() {
   await download({
     jarUrl: 'http://www.redeletras.com/diccionario/',
-    outputFilename: './spanish/fise-2.txt',
+    outputFilename: dictionaryPath('spanish', 'fise-2.txt'),
   });
 }
 
