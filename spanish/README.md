@@ -9,7 +9,7 @@ Official dictionary of the Federación Internacional de Léxico en Español ([FI
 
 ## Lexicón FISE-2 2009
 
-Official dictionary of the Federación Internacional de Scrabble en Español ([FISE](http://fisescrabble.org)).
+Official dictionary of the Federación Internacional de Scrabble en Español (FISE).
 
 - Download: [`fise-2.txt`](fise-2.txt)
 - Source: http://www.redeletras.com/diccionario/
