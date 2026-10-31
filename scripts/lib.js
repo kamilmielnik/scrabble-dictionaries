@@ -2,6 +2,7 @@ const { https } = require('follow-redirects');
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
+const { text } = require('stream/consumers');
 const { pipeline } = require('stream/promises');
 const unzipper = require('unzipper');
 const locales = require('./locales');
@@ -9,18 +10,25 @@ const { extractWords } = require('./words');
 
 module.exports = {
   updateDictionary,
+  updateTextDictionary,
 };
 
 async function updateDictionary({ language, filename, url, encoding, isWantedEntry }) {
   console.log(`Downloading ${url}`);
   const files = await downloadZipEntries(url, isWantedEntry, encoding);
-  const words = extractWords(files.join('\n'), locales[language]);
-  saveDictionary(language, filename, words);
-  console.log(`Saved ${words.length} words to ${language}/${filename}`);
+  saveDictionary(language, filename, files.join('\n'));
 }
 
-function saveDictionary(language, filename, words) {
+async function updateTextDictionary({ language, filename, url, getWord }) {
+  console.log(`Downloading ${url}`);
+  const file = await text(await get(url));
+  saveDictionary(language, filename, file.split('\n').map(getWord).join('\n'));
+}
+
+function saveDictionary(language, filename, file) {
+  const words = extractWords(file, locales[language]);
   fs.writeFileSync(path.join(__dirname, '..', language, filename), words.join('\n'));
+  console.log(`Saved ${words.length} words to ${language}/${filename}`);
 }
 
 async function downloadZipEntries(url, isWantedEntry, encoding = 'utf8') {

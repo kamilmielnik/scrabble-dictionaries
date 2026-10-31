@@ -22,6 +22,7 @@
 
 | Language | Dictionary | File | Words | Source |
 | --- | --- | --- | ---: | --- |
+| [Catalan](catalan) | DISC | [`disc.txt`](catalan/disc.txt) | 645,491 | [jmontane/disc](https://github.com/jmontane/disc) |
 | [English](english) | NASPA Word List (TWL06) | [`twl06.txt`](english/twl06.txt) | 178,691 | [wordgamedictionary.com](https://www.wordgamedictionary.com/twl06/download/twl06.txt) |
 | [English](english) | Collins Scrabble Words (SOWPODS) | [`sowpods.txt`](english/sowpods.txt) | 267,752 | [wordgamedictionary.com](https://www.wordgamedictionary.com/sowpods/download/sowpods.txt) |
 | [French](french) | ODS8 | [`ods8.txt`](french/ods8.txt) | 411,430 | [Thecoolsim/French-Scrabble-ODS8](https://github.com/Thecoolsim/French-Scrabble-ODS8) |
@@ -50,7 +51,7 @@ Every dictionary is a plain [UTF-8](https://en.wikipedia.org/wiki/UTF-8) text fi
 
 ## Updating
 
-`bun run update` downloads the Romanian and Spanish FISE dictionaries from their sources and normalizes them. The remaining dictionaries were obtained manually; their sources are listed in the language READMEs.
+`bun run update` downloads the Catalan, Romanian and Spanish FISE dictionaries from their sources and normalizes them. The remaining dictionaries were obtained manually; their sources are listed in the language READMEs.
 
 ## Adding a dictionary
 

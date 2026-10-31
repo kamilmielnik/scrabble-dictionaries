@@ -1,4 +1,5 @@
 module.exports = {
+  catalan: 'ca',
   english: 'en',
   french: 'fr',
   german: 'de',

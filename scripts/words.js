@@ -1,3 +1,5 @@
+const LETTERS_AND_ELA_GEMINADA = /^(?:\p{L}|l·l)+$/u;
+
 module.exports = {
   compareWords,
   extractWords,
@@ -11,7 +13,7 @@ function extractWords(file, locale) {
 }
 
 function isWord(line) {
-  return /^\p{L}+$/u.test(line);
+  return LETTERS_AND_ELA_GEMINADA.test(line);
 }
 
 function compareWords(locale) {

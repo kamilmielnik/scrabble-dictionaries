@@ -1,3 +1,4 @@
+const catalan = require('./catalan');
 const romanian = require('./romanian');
 const spanish = require('./spanish');
 
@@ -7,6 +8,7 @@ run().catch((error) => {
 });
 
 async function run() {
+  await catalan();
   await romanian();
   await spanish();
 }
